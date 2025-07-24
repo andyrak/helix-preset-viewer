@@ -2529,9 +2529,11 @@ Vue.filter('getLabel', function (value) {
 
 new Vue({
   render: h => h(App),
-  data: {
+  data: function() {
+return {
       hxModels: hxModels,
       hxLabels: hxLabels,
       hxPreset: hxPreset
-  }
+  };
+}
 }).$mount('#app')

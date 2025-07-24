@@ -1,10 +1,10 @@
 <template>
     <table class="parameters">
-        <tr v-for="(value,key) in block" v-if="key === '@model'">
-            <th>{{ key | getLabel }}</th><th> {{ value | getModel('name') }}</th>
+        <tr v-for="[key, value] in modelEntries" :key="`model-${key}`">
+            <th>{{ getLabel(key) }}</th><th> {{ getModel(value, 'name') }}</th>
         </tr>
-        <tr v-for="(value,key) in block" v-if="key !== '@model' && key !== '@path' && key !== 'Voice' && key !== '@type' && key !== '@bypassvolume' && key !== '@cab' && key !== '@enabled' && key !== 'SSwitch'">
-            <td>{{ key | getLabel }}</td><td> {{ value }} </td>
+        <tr v-for="[key, value] in parameterEntries" :key="`param-${key}`">
+            <td>{{ getLabel(key) }}</td><td> {{ value }} </td>
         </tr>    
     </table>
 </template>
@@ -18,7 +18,38 @@ export default {
             preset: this.$root.hxPreset
         }
     },
-    props: ['block']
+    props: ['block'],
+    computed: {
+        modelEntries() {
+            if (!this.block) return [];
+            return Object.entries(this.block).filter(([key]) => key === '@model');
+        },
+        parameterEntries() {
+            if (!this.block) return [];
+            const excludedKeys = ['@model', '@path', 'Voice', '@type', '@bypassvolume', '@cab', '@enabled', 'SSwitch'];
+            return Object.entries(this.block).filter(([key]) => !excludedKeys.includes(key));
+        }
+    },
+    methods: {
+        getModel(value, prop) {
+            if (!value) return '';
+            value = value.toString();
+            if (typeof this.$root.hxModels[value] !== "undefined") {
+                return this.$root.hxModels[value][prop];
+            } else {
+                return "unknown";
+            }
+        },
+        getLabel(value) {
+            if (!value) return '';
+            value = value.toString();
+            if (typeof this.$root.hxLabels[value] !== "undefined") {
+                return this.$root.hxLabels[value];
+            } else {
+                return value + "*";
+            }
+        }
+    }
 }
 </script>
 

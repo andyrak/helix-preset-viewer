@@ -1,7 +1,7 @@
 <template>
     <div id="app">
         <div class="container">
-            <Header/>
+            <AppHeader/>
             <div v-if="!presetLoaded" class="path">
                 <BlockItem type="input"></BlockItem>
                 <BlockItem type="dist"></BlockItem>
@@ -33,102 +33,102 @@
             
             <div v-if="presetLoaded" class="path">
                 <BlockItem     
-                    v-for="(value, key) in preset.data.tone.dsp0" 
-                    v-if="key === 'inputA'"  
-                    v-bind:type="value['@model'] | getModel('type')" v-bind:id="value" v-bind:position="0">
+                    v-for="[key, value] in dsp0InputA" 
+                    :key="`dsp0-${key}`"
+                    v-bind:type="getModel(value['@model'], 'type')" v-bind:id="value" v-bind:position="0">
                 </BlockItem>
                 <BlockItem     
-                    v-for="(value, key) in preset.data.tone.dsp0" 
-                    v-if="key === 'split' || key === 'join'" 
-                    v-bind:type="value['@model'] | getModel('type')" v-bind:id="value" v-bind:position="value['@position']">
+                    v-for="[key, value] in dsp0SplitJoin" 
+                    :key="`dsp0-${key}`"
+                    v-bind:type="getModel(value['@model'], 'type')" v-bind:id="value" v-bind:position="value['@position']">
                 </BlockItem>
                 <BlockItem     
-                    v-for="(value, key) in preset.data.tone.dsp0" 
-                    v-if="value['@path'] === 0 && key.startsWith('block')" 
-                    v-bind:type="value['@model'] | getModel('type')" v-bind:id="value" v-bind:position="value['@position']">
+                    v-for="[key, value] in dsp0Path0Blocks" 
+                    :key="`dsp0-${key}`"
+                    v-bind:type="getModel(value['@model'], 'type')" v-bind:id="value" v-bind:position="value['@position']">
                 </BlockItem>
                 <BlockItem     
-                    v-for="(value, key) in preset.data.tone.dsp0" 
-                    v-if="key === 'outputA'"  
-                    v-bind:type="value['@model'] | getModel('type')" v-bind:id="value" v-bind:position="20">
-                </BlockItem>
-            </div>
-            <div v-if="presetLoaded" class="path">
-                <BlockItem     
-                    v-for="(value, key) in preset.data.tone.dsp0" 
-                    v-if="key === 'inputB'"  
-                    v-bind:type="value['@model'] | getModel('type')" v-bind:id="value" v-bind:position="0">
-                </BlockItem>
-                <BlockItem     
-                    v-for="(value, key) in preset.data.tone.dsp0" 
-                    v-if="value['@path'] === 1 && key.startsWith('block')" 
-                    v-bind:type="value['@model'] | getModel('type')" v-bind:id="value" v-bind:position="value['@position']">
-                </BlockItem>
-                <BlockItem     
-                    v-for="(value, key) in preset.data.tone.dsp0" 
-                    v-if="key === 'outputB'"  
-                    v-bind:type="value['@model'] | getModel('type')" v-bind:id="value" v-bind:position="20">
+                    v-for="[key, value] in dsp0OutputA" 
+                    :key="`dsp0-${key}`"
+                    v-bind:type="getModel(value['@model'], 'type')" v-bind:id="value" v-bind:position="20">
                 </BlockItem>
             </div>
             <div v-if="presetLoaded" class="path">
                 <BlockItem     
-                    v-for="(value, key) in preset.data.tone.dsp1" 
-                    v-if="key === 'inputA'"  
-                    v-bind:type="value['@model'] | getModel('type')" v-bind:id="value" v-bind:position="0">
+                    v-for="[key, value] in dsp0InputB" 
+                    :key="`dsp0-${key}`"
+                    v-bind:type="getModel(value['@model'], 'type')" v-bind:id="value" v-bind:position="0">
                 </BlockItem>
                 <BlockItem     
-                    v-for="(value, key) in preset.data.tone.dsp1" 
-                    v-if="key === 'split' || key === 'join'" 
-                    v-bind:type="value['@model'] | getModel('type')" v-bind:id="value" v-bind:position="value['@position']">
+                    v-for="[key, value] in dsp0Path1Blocks" 
+                    :key="`dsp0-${key}`"
+                    v-bind:type="getModel(value['@model'], 'type')" v-bind:id="value" v-bind:position="value['@position']">
                 </BlockItem>
                 <BlockItem     
-                    v-for="(value, key) in preset.data.tone.dsp1" 
-                    v-if="value['@path'] === 0 && key.startsWith('block')" 
-                    v-bind:type="value['@model'] | getModel('type')" v-bind:id="value" v-bind:position="value['@position']">
-                </BlockItem>
-                <BlockItem     
-                    v-for="(value, key) in preset.data.tone.dsp1" 
-                    v-if="key === 'outputA'"  
-                    v-bind:type="value['@model'] | getModel('type')" v-bind:id="value" v-bind:position="20">
+                    v-for="[key, value] in dsp0OutputB" 
+                    :key="`dsp0-${key}`"
+                    v-bind:type="getModel(value['@model'], 'type')" v-bind:id="value" v-bind:position="20">
                 </BlockItem>
             </div>
             <div v-if="presetLoaded" class="path">
                 <BlockItem     
-                    v-for="(value, key) in preset.data.tone.dsp1" 
-                    v-if="key === 'inputB'"  
-                    v-bind:type="value['@model'] | getModel('type')" v-bind:id="value" v-bind:position="0">
+                    v-for="[key, value] in dsp1InputA" 
+                    :key="`dsp1-${key}`"
+                    v-bind:type="getModel(value['@model'], 'type')" v-bind:id="value" v-bind:position="0">
                 </BlockItem>
                 <BlockItem     
-                    v-for="(value, key) in preset.data.tone.dsp1" 
-                    v-if="value['@path'] === 1 && key.startsWith('block')" 
-                    v-bind:type="value['@model'] | getModel('type')" v-bind:id="value" v-bind:position="value['@position']">
+                    v-for="[key, value] in dsp1SplitJoin" 
+                    :key="`dsp1-${key}`"
+                    v-bind:type="getModel(value['@model'], 'type')" v-bind:id="value" v-bind:position="value['@position']">
                 </BlockItem>
                 <BlockItem     
-                    v-for="(value, key) in preset.data.tone.dsp1" 
-                    v-if="key === 'outputB'"  
-                    v-bind:type="value['@model'] | getModel('type')" v-bind:id="value" v-bind:position="20">
+                    v-for="[key, value] in dsp1Path0Blocks" 
+                    :key="`dsp1-${key}`"
+                    v-bind:type="getModel(value['@model'], 'type')" v-bind:id="value" v-bind:position="value['@position']">
+                </BlockItem>
+                <BlockItem     
+                    v-for="[key, value] in dsp1OutputA" 
+                    :key="`dsp1-${key}`"
+                    v-bind:type="getModel(value['@model'], 'type')" v-bind:id="value" v-bind:position="20">
+                </BlockItem>
+            </div>
+            <div v-if="presetLoaded" class="path">
+                <BlockItem     
+                    v-for="[key, value] in dsp1InputB" 
+                    :key="`dsp1-${key}`"
+                    v-bind:type="getModel(value['@model'], 'type')" v-bind:id="value" v-bind:position="0">
+                </BlockItem>
+                <BlockItem     
+                    v-for="[key, value] in dsp1Path1Blocks" 
+                    :key="`dsp1-${key}`"
+                    v-bind:type="getModel(value['@model'], 'type')" v-bind:id="value" v-bind:position="value['@position']">
+                </BlockItem>
+                <BlockItem     
+                    v-for="[key, value] in dsp1OutputB" 
+                    :key="`dsp1-${key}`"
+                    v-bind:type="getModel(value['@model'], 'type')" v-bind:id="value" v-bind:position="20">
                 </BlockItem>
             </div>
             
             <ParametersTable v-bind:block="currentBlock"></ParametersTable>
             
-            <Footer/>
+            <AppFooter/>
         </div>
     </div>
 </template>
 
 <script>
 
-import Header from './components/Header.vue'
-import Footer from './components/Footer.vue'
+import AppHeader from './components/Header.vue'
+import AppFooter from './components/Footer.vue'
 import BlockItem from './components/BlockItem.vue'
 import ParametersTable from './components/ParametersTable.vue'
 
 export default {
     name: 'app',
     components: {
-        Header,
-        Footer,
+        AppHeader,
+        AppFooter,
         BlockItem,
         ParametersTable
     },
@@ -140,7 +140,74 @@ export default {
             presetLoaded: false
         }
     },
+    computed: {
+        dsp0InputA() {
+            if (!this.presetLoaded || !this.preset.data.tone.dsp0) return [];
+            return Object.entries(this.preset.data.tone.dsp0).filter(([key]) => key === 'inputA');
+        },
+        dsp0SplitJoin() {
+            if (!this.presetLoaded || !this.preset.data.tone.dsp0) return [];
+            return Object.entries(this.preset.data.tone.dsp0).filter(([key]) => key === 'split' || key === 'join');
+        },
+        dsp0Path0Blocks() {
+            if (!this.presetLoaded || !this.preset.data.tone.dsp0) return [];
+            return Object.entries(this.preset.data.tone.dsp0).filter(([key, value]) => value['@path'] === 0 && key.startsWith('block'));
+        },
+        dsp0OutputA() {
+            if (!this.presetLoaded || !this.preset.data.tone.dsp0) return [];
+            return Object.entries(this.preset.data.tone.dsp0).filter(([key]) => key === 'outputA');
+        },
+        dsp0InputB() {
+            if (!this.presetLoaded || !this.preset.data.tone.dsp0) return [];
+            return Object.entries(this.preset.data.tone.dsp0).filter(([key]) => key === 'inputB');
+        },
+        dsp0Path1Blocks() {
+            if (!this.presetLoaded || !this.preset.data.tone.dsp0) return [];
+            return Object.entries(this.preset.data.tone.dsp0).filter(([key, value]) => value['@path'] === 1 && key.startsWith('block'));
+        },
+        dsp0OutputB() {
+            if (!this.presetLoaded || !this.preset.data.tone.dsp0) return [];
+            return Object.entries(this.preset.data.tone.dsp0).filter(([key]) => key === 'outputB');
+        },
+        dsp1InputA() {
+            if (!this.presetLoaded || !this.preset.data.tone.dsp1) return [];
+            return Object.entries(this.preset.data.tone.dsp1).filter(([key]) => key === 'inputA');
+        },
+        dsp1SplitJoin() {
+            if (!this.presetLoaded || !this.preset.data.tone.dsp1) return [];
+            return Object.entries(this.preset.data.tone.dsp1).filter(([key]) => key === 'split' || key === 'join');
+        },
+        dsp1Path0Blocks() {
+            if (!this.presetLoaded || !this.preset.data.tone.dsp1) return [];
+            return Object.entries(this.preset.data.tone.dsp1).filter(([key, value]) => value['@path'] === 0 && key.startsWith('block'));
+        },
+        dsp1OutputA() {
+            if (!this.presetLoaded || !this.preset.data.tone.dsp1) return [];
+            return Object.entries(this.preset.data.tone.dsp1).filter(([key]) => key === 'outputA');
+        },
+        dsp1InputB() {
+            if (!this.presetLoaded || !this.preset.data.tone.dsp1) return [];
+            return Object.entries(this.preset.data.tone.dsp1).filter(([key]) => key === 'inputB');
+        },
+        dsp1Path1Blocks() {
+            if (!this.presetLoaded || !this.preset.data.tone.dsp1) return [];
+            return Object.entries(this.preset.data.tone.dsp1).filter(([key, value]) => value['@path'] === 1 && key.startsWith('block'));
+        },
+        dsp1OutputB() {
+            if (!this.presetLoaded || !this.preset.data.tone.dsp1) return [];
+            return Object.entries(this.preset.data.tone.dsp1).filter(([key]) => key === 'outputB');
+        }
+    },
     methods: {
+        getModel(value, prop) {
+            if (!value) return '';
+            value = value.toString();
+            if (typeof this.$root.hxModels[value] !== "undefined") {
+                return this.$root.hxModels[value][prop];
+            } else {
+                return "unknown";
+            }
+        },
         /* file upload based on help from https://codepen.io/Atinux/pen/qOvawK & https://stackoverflow.com/questions/14740927/using-html-5-file-api-to-load-a-json-file */
         onFileChange(e) { 
             var files = e.target.files || e.dataTransfer.files;
